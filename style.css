@@ -1,0 +1,1886 @@
+@charset "utf-8";
+
+//googlefont
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&display=swap");
+/*==================================================================
+# mixins
+==================================================================*/
+//マップ型変数breakpointsを定義
+$breakpoints: (
+  //キー　　値
+  "sp": "screen and (max-width: 767px)",
+  //767px以下（スマホ）用の表示
+  "pc": "screen and (min-width: 768px)",
+  //768px以上（タブレット・PC）用の表示
+) !default;
+
+//メディアクエリ用のmixinを定義。デフォ値はmd
+@mixin mq($breakpoint: sp) {
+  //map-get(マップ型変数, キー)で値を取得
+  @media #{map-get($breakpoints, $breakpoint)} {
+    //この中をカスタムできる
+    @content;
+  }
+}
+/*==================================================================
+# colors
+==================================================================*/
+$primary-color: #3e3e3e;
+
+$font-en: "Montserrat", sans-serif;
+$font-ja: "游ゴシック", "游ゴシック体", "Yu Gothic Medium", "YuGothic", sans-serif;
+
+/*==================================================================
+# common - 全体に共通するスタイル
+==================================================================*/
+@include mq("sp") {
+  .is-pc {
+    display: none; //スマホの時、.is-pcがついていたら表示されない
+  }
+}
+
+@include mq("pc") {
+  .is-sp {
+    display: none; //pcの時、.is-spがついていたら表示されない
+  }
+}
+
+body {
+  font-size: 16px;
+  color: $primary-color;
+  font-family: $font-ja;
+  line-height: 19 / 16;
+  background: #f3f3f3;
+}
+
+img {
+  width: 100%;
+}
+
+.inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 40px;
+  box-sizing: content-box;
+
+  @include mq("sp") {
+    padding: 0 16px;
+  }
+}
+
+/*header
+--------------------------------------------------------*/
+.header {
+  background: #ffffff1a;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 20;
+  font-family: $font-en;
+
+  @include mq("sp") {
+    background: rgba(255, 255, 255, 1);
+  }
+
+  .drawer-hamburger {
+    .drawer--right & {
+      // right: 4px;
+      // top: 4px;
+    }
+  }
+
+  .drawer-hamburger-icon {
+    background: $primary-color;
+    height: 4px;
+    border-radius: 2px;
+
+    .drawer-open & {
+      background: transparent;
+
+      &::before,
+      &::after {
+        background: #fff;
+      }
+    }
+
+    &::before,
+    &::after {
+      background: $primary-color;
+      height: 4px;
+      border-radius: 2px;
+    }
+  }
+}
+
+.drawer-overlay {
+  background: #3e3e3e;
+  opacity: 0.7;
+  z-index: 19; //.headerよりも小さくすることで背景が下になる
+}
+
+.header-logo {
+  font-size: 23px;
+  font-weight: bold;
+  width: 160px;
+  font-family: $font-en;
+  color: $primary-color;
+  line-height: 68px;
+}
+
+.header-inner {
+  height: 83px;
+  line-height: 83px;
+
+  @include mq("sp") {
+    height: 68px;
+  }
+}
+
+.header-nav {
+  // margin: 0 auto;
+
+  @include mq("sp") {
+    background-color: #fff;
+    padding-top: 128px;  
+    text-align: center; 
+  }
+}
+
+.drawer--right .drawer-nav {
+  @include mq("sp") {
+    width: 300px;
+    right: -18.75rem;
+  }
+}
+
+.drawer--right.drawer-open .drawer-hamburger {
+  @include mq("sp") {
+    right: 18.75rem;
+  }
+}
+
+.drawer-toggle {
+  @include mq("pc") {
+    display: none;
+  }
+}
+
+.header-nav-list {
+  @include mq("pc") {
+    text-align: center;
+  }
+}
+
+.header-nav-item {
+  display: inline-block;
+
+  & + & {
+    @include mq("pc") {
+      margin-left: 28px; //2つ目以降margin-leftを付ける書き方
+    }
+  }
+
+  @include mq("sp") {
+    display: block;
+    height: 54px;
+  }
+}
+
+.header-nav-item-link {
+  display: inline-block; //高さを指定するため
+  color: $primary-color;
+  height: 30px; //リンク領域を広げるために高さ指定
+  line-height: 30px;
+  letter-spacing: 0.025em; //フォントサイズ16px、AV0.4pxだから
+  position: relative;
+  padding: 0 2px;
+
+  @include mq("sp") {
+    font-size: 18px;
+    padding: 0 15px;
+    height: 60px; //リンク領域を広げるために高さ指定
+    line-height: 60px;
+  }
+
+  @include mq("pc") {
+    //スマホ版の時にhoverなどで動作をつけるとタップした後に動作が残ってしまうことがあるのでPC版のみにつける
+    transition: color 0.4s;
+
+    &:hover {
+      &::after {
+        position: absolute;
+        content: "";
+        background: $primary-color;
+        height: 1px;
+        width: 100%;
+        bottom: 0;
+        left: 50%;
+        transform: translatex(-50%);
+      }
+    }
+  }
+}
+
+// /*footer
+// --------------------------------------------------------*/
+.footer {
+  background: $primary-color;
+  padding: 60px 0;
+  color: #fff;
+
+  @include mq("sp") {
+    text-align: center;
+    padding: 44px 0;
+  } 
+}
+
+.footer-inner {
+  @include mq("pc") {
+    display: flex;
+    padding: 0 120px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+}
+
+.footer-left {
+  @include mq("pc") {
+    margin-right: auto;
+  }
+}
+
+.footer-sns-list {
+  @include mq("sp") {
+    margin-top: 14px;
+  }
+}
+
+.footer-sns-item {
+  display: inline-block;
+
+  & + & {
+    margin-left: 32px;
+
+    @include mq('sp') {
+      margin-left: 46px;
+    }
+  }
+}
+
+.footer-sns-item-link {
+  color: $primary-color;
+  opacity: 0.6;
+  font-size: 36px;
+  display: block;
+  transition: opacity 0.4s;
+
+  &:hover {
+    opacity: 0.5;
+  }
+}
+
+.footer-nav-list {
+  margin-top: 26px;
+
+  @include mq("sp") {
+    margin-top: 32px;
+    font-size: 14px; 
+  }
+}
+
+.footer-nav-item {
+  & + & {
+    margin-top: 18px;
+
+    @include mq("sp") { 
+      margin-top: 8px;
+    }
+  }
+}
+
+.footer-nav-item-link {
+  color: #fff;
+  // line-height: 1.625;
+  letter-spacing: 0.025em; //フォントサイズ16px、AV0.4pxだから
+  position: relative;
+  display: inline-block; //高さを指定するため
+  height: 30px; //リンク領域を広げるために高さ指定
+  line-height: 30px;
+
+  @include mq("sp") {
+    line-height: 1.85714;
+  }
+
+  &:hover {
+    &::after {
+      position: absolute;
+      content: "";
+      background: #fff;
+      height: 1px;
+      width: 100%;
+      bottom: 0;
+      left: 50%;
+      transform: translatex(-50%);
+    }
+  }
+}
+
+.footer-right {
+  @include mq("pc") {
+    margin-left: auto;
+  }
+
+  @include mq("sp") {
+    margin-top: 36px;
+  }
+}
+
+.footer-logo {
+  font-size: 40px;
+  font-weight: bold;
+  font-family: $font-en;
+  color: #e3e3e3;
+
+  @include mq("sp") {
+    font-size: 32px;
+    text-align: center;
+  }
+}
+
+.footer-copyright {
+  margin-top: 10px;
+  font-family: $font-en;
+  font-size: 12px;
+  letter-spacing: 0.025em; //フォントサイズ12px、AV0.3pxだから
+  opacity: 0.4;
+  text-align: right;
+  color: #fff;
+
+  @include mq("sp") {
+    margin-top: 12px;
+    text-align: center;
+  }
+}
+
+// /*==================================================================
+// #main
+// ==================================================================*/
+// /* common
+// --------------------------------------------------------*/
+// .main {
+//   padding-top: 83px;
+
+//   @include mq("sp") {
+//     padding-top: 68px;
+//   }
+// }
+
+.section {
+  padding: 120px 0;
+
+  @include mq("sp") {
+    padding-top: 40px;
+  }
+}
+
+/* util
+--------------------------------------------------------*/
+.util-title {
+  font-size: 36px;
+  font-weight: 600;
+  text-align: center;
+  line-height: 1; //.sectionでmarginを付けており、そこにline-heightが含まれると誤差が生まれてしまうので1に指定しておく
+  font-family: $font-en;
+  padding-top: 62px;
+
+  @include mq("sp") {
+    font-size: 30px;
+    padding-top: 44px;
+  }
+}
+
+.util-link {
+  font-size: 20px;
+  letter-spacing: 0.2em;
+  color: $primary-color;
+  border: solid 1px #707070;
+  background: #fff;
+  display: inline-block; //linkを囲うタグにtext-align:center;を指定することで中央寄せにするため
+  padding: 20px 78px;
+  transition: background-color 0.4s, color 0.4s; //何を変化させるのかを指定すること。出ないと意図しないところ（例えばpaddingとか）にもかかってしまう
+  font-family: $font-en;
+  font-weight: 600;
+
+  @include mq("sp") {
+    font-size: 18px;
+  }
+
+  &:hover {
+    background: $primary-color;
+    color: #fff;
+  }
+
+  // @include mq("pc") {
+  //   &:not(.-submit) {
+  //     &:hover {
+  //       background: $primary-color;
+  //       color: #fff;
+  //     }
+  //   }
+  // }
+}
+
+.util-orange-link {
+  color: #fff;
+  font-size: 18px;
+  font-weight: 700;
+  display: inline-block;
+  padding: 16px 50px;
+  background: #ffaa3b;
+  border-radius: 10px;
+  display: inline-block;
+  text-decoration: none;
+  box-shadow: 0 3px 5px rgba(62, 62, 62, 0.2);
+  text-align: center;
+  transition: 0.4s;
+
+  @include mq("sp") {
+    font-size: 16px;
+  }
+}
+
+/*top
+--------------------------------------------------------*/
+.top {
+  background: url(../img/mv.png) no-repeat center center / cover;
+  height: 648px;
+  width: 100%;
+  position: relative;
+
+  @include mq("sp") {
+    background-position: 20% center;
+    // margin-top: 68px;
+    height: 668px;
+  }
+}
+
+.top-message-inner {
+  @include mq("pc") {
+    margin: 0 auto;
+    max-width: 1240px;
+    padding: 228px 20px 0 0;
+    width: 100%;
+  }
+
+  @include mq("sp") {
+    padding: 222px 16px 0;
+    width: 100%;
+  }
+}
+
+.top-message {
+  @include mq("pc") {
+    margin-left: auto;
+    width: 600px;
+  }
+}
+
+.top-message-title {
+  font-weight: bold;
+  letter-spacing: 0.000625em;
+  font-size: 32px;
+  line-height: 1.5;
+
+  @include mq("sp") {
+    font-size: 24px;
+    line-height: 1.66666;
+  }
+}
+
+.top-message-text {
+  margin-top: 28px;
+  font-size: 18px;
+  letter-spacing: 0.025em;
+  font-weight: bold;
+  line-height: 1.5555;
+
+  @include mq("sp") {
+    font-size: 14px;
+    line-height: 1.66666;
+    margin-top: 18px;
+    letter-spacing: 0.025em;
+  }
+}
+
+.top-footer {
+  margin-top: 40px;
+
+  @include mq("sp") {
+    text-align: center;
+    margin-top: 24px;
+  }
+}
+
+.top-button {
+  &:hover {
+    background: #f18900;
+  }
+
+  @include mq("sp") {
+    padding: 16px 32px;
+  }
+}
+
+/*news
+--------------------------------------------------------*/
+.news {
+  @include mq("sp") {
+    position: relative;
+    margin: 0;
+    height: 574px; //?
+  }
+}
+
+.news-content {
+  background: #fff;
+  padding: 0 40px 40px;
+  box-shadow: 0 5px 12px rgba(62, 62, 62, 0.2);
+
+  @include mq("sp") {
+    position: absolute;
+    top: -7%;
+    max-width: 90%; //この指定でいいのか？
+    margin: 0 auto;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  @include mq("sp") {
+    padding: 0 0 40px;
+  }
+}
+
+.news-items {
+  margin: 66px auto 0;
+  width: 1080px;
+  max-width: 100%;
+
+  @include mq("sp") {
+    margin: 41px auto 38px;
+  }
+
+  a {
+    color: $primary-color;
+  }
+}
+
+.news-item {
+  display: flex;
+  padding: 38px 0;
+  border-bottom: 1px solid #cecdcd;
+  align-items: center;
+  position: relative;
+  transition: background-color 0.4s;
+
+  &::after {
+    position: absolute;
+    content: "";
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent url(../img/news-arrow.png) no-repeat center center / contain;
+    right: 16px;
+    width: 11px;
+    height: 21px;
+  }
+
+  &:hover {
+    background: #4973ff1a;
+  }
+
+  @include mq("sp") {
+    padding: 13px 12px 10px;
+  }
+
+  &:first-child {
+    border-top: 1px solid #cecdcd;
+  }
+
+  @include mq("sp") {
+    display: block;
+  }
+}
+
+.news-meta {
+  display: flex;
+  width: 259px; //( 98 + 40 + 121 )px
+}
+
+.news-date {
+  width: 100px;
+  height: 26px;
+  line-height: 26px;
+  font-family: $font-en;
+  letter-spacing: 0.025em;
+  font-size: 18px;
+
+  @include mq("sp") {
+    width: auto;
+    font-size: 14px;
+  }
+}
+
+.news__label {
+  width: 121px;
+  height: 32px;
+  line-height: 30px;
+  text-align: center;
+  background: #fff;
+  border-radius: 50px;
+  border: 2px solid #3b69ff;
+  font-size: 14px;
+  text-decoration: none;
+  transition: all 0.3s ease 0s;
+  margin-left: 38px;
+
+  @include mq("sp") {
+    margin-left: 25px;
+    width: 81px;
+    height: 20px;
+    line-height: 20px;
+    font-size: 12px;
+  }
+}
+
+.news__text {
+  width: calc(100% - 227px);
+  padding-right: 83px;
+  margin-left: 40px;
+  line-height: 1.55555;
+  font-size: 18px;
+  letter-spacing: 0.025em;
+
+  @include mq("sp") {
+    margin: 0;
+    width: 100%;
+    margin-top: 4px;
+    padding-right: 32px;
+    line-height: 1.42857;
+    font-size: 14px;
+  }
+}
+
+.news__footer {
+  text-align: center;
+  margin-top: 38px;
+
+  @include mq("sp") {
+  }
+}
+
+.news-link {
+  @include mq("sp") {
+    letter-spacing: 0.2;
+    padding: 17px 98px;
+  }
+}
+
+/* service
+--------------------------------------------------------*/
+.service {
+  padding: 0;
+  background: $primary-color;
+  position: relative;
+  margin-bottom: 215px; //これでいいのか？
+
+  @include mq("sp") {
+    margin-bottom: 390px; //これでいいのか？
+  }
+}
+
+.service-title {
+  color: #fff;
+  width: 100%;
+  height: 400px;
+
+  @include mq("sp") {
+    height: 480px;
+  }
+}
+
+.service-items {
+  position: absolute;
+  top: 164px;
+  left: 50%;
+  width: 960px;
+  max-width: 91%;
+  transform: translateX(-50%);
+
+  @include mq("sp") {
+    top: 117px;
+  }
+}
+
+.service-list-items {
+  display: flex;
+  background: #fff;
+  // margin-top: 67px;
+  // height: 331px;
+  box-shadow: 0 5px 12px rgba(62, 62, 62, 0.2);
+  justify-content: space-between;
+  padding: 60px 45px 52px;
+
+  @include mq("sp") {
+    display: block;
+    height: auto;
+    padding: 38px 16px;
+  }
+}
+
+.service-list-item {
+  & + & {
+    margin-left: 90px;
+    margin-top: 5px;
+
+    @include mq("sp") {
+      margin-left: 0;
+      margin-top: 52px;
+    }
+  }
+}
+
+.service-item-picture {
+  width: 50px;
+  margin: 10px auto;
+
+  @include mq("sp") {
+    margin: 14px auto;
+    height: 42px;
+  }
+
+  img {
+    display: block;
+  }
+}
+
+.service-item-title {
+  text-align: center;
+  font-family: $font-en;
+  font-weight: bold;
+  letter-spacing: 0.2em;
+  line-height: 1.4;
+  margin-top: 18px;
+  font-size: 20px;
+
+  @include mq("sp") {
+    margin-top: 8px;
+    line-height: 1.2;
+  }
+}
+
+.service-item-text {
+  margin-top: 20px;
+  line-height: 1.714285;
+  font-size: 14px;
+
+  @include mq("sp") {
+    margin-top: 14px;
+  }
+}
+
+/* results
+--------------------------------------------------------*/
+.results {
+  padding-left: 40px;
+
+  @include mq("sp") {
+    padding: 0;
+  }
+}
+
+.results-contain {
+  background: $primary-color;
+  padding: 64px 0 60px 60px;
+
+  @include mq("sp") {
+    padding: 44px 0 40px 16px;
+    text-align: center;
+  }
+}
+
+.results-title {
+  text-align: left;
+  color: #fff;
+  padding: 0;
+
+  @include mq("sp") {
+    text-align: center;
+    padding-right: 16px;
+  }
+}
+
+.results-list {
+  margin-top: 66px;
+
+  @include mq("sp") {
+    margin-top: 40px;
+  }
+}
+
+.slick-slide {
+  //slickで指定されたクラス。検証で検索して探すと出てくる
+  & + & {
+    margin-left: 40px;
+
+    @include mq("sp") {
+      margin-left: 20px;
+    }
+  }
+}
+
+.results-item {
+}
+.slide-item {
+  width: 400px;
+
+  @include mq("sp") {
+    width: 274px;
+  }
+}
+
+.results-item-link {
+}
+
+.results-item-picture {
+  img {
+  }
+}
+
+.results-item-body {
+  background: #fff;
+  color: $primary-color;
+  padding: 16px;
+
+  @include mq("sp") {
+    padding: 12px;
+  }
+}
+
+.results-item-titel {
+  font-size: 20px;
+  font-weight: bold;
+
+  @include mq("sp") {
+    font-size: 14px;
+  }
+}
+
+.results-item-text {
+  margin-top: 16px;
+  line-height: 1.5;
+
+  @include mq("sp") {
+    font-size: 12px;
+    margin-top: 12px;
+  }
+}
+
+.results-footer {
+  margin-top: 40px;
+
+  @include mq("sp") {
+    margin-top: 24px;
+    padding-right: 16px;
+  }
+
+  a {
+    color: #fff;
+    border: solid 1px #fff;
+    background: $primary-color;
+
+    &:hover {
+      background: #fff;
+      color: $primary-color;
+    }
+  }
+}
+
+.results-link {
+  @include mq("sp") {
+    letter-spacing: 0.2;
+    padding: 17px 98px;
+  }
+}
+
+//slickのドット
+.slide-dots {
+  margin-top: 42px;
+
+  @include mq("sp") {
+    margin-top: 28px;
+  }
+
+  li {
+    display: inline-block;
+    margin-right: 34px;
+
+    button {
+      position: relative;
+      text-indent: -9999px;
+
+      &:before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        background: #fff;
+        height: 12px;
+        width: 12px;
+        border-radius: 50%;
+      }
+    }
+
+    &.slick-active {
+      button:before {
+        background-color: #fff;
+        border: solid 1px $primary-color;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        box-shadow: 0 0 0 1px #fff;
+        top: -1px;
+      }
+    }
+  }
+}
+
+/* price
+--------------------------------------------------------*/
+.price {
+  padding-top: 126px;
+
+  @include mq("sp") {
+    padding: 40px 16px 120px;
+  }
+}
+
+.price-title {
+  padding: 0;
+}
+
+.price__table {
+  width: 960 / 1200 * 100%;
+  margin: 64px auto 0;
+
+  @include mq("sp") {
+    margin-top: 44px;
+    width: 100%;
+  }
+}
+
+.table {
+  border-collapse: collapse;
+  width: 100%;
+  table-layout: fixed;
+  border: 1px solid #707070;
+  font-size: 24px;
+  font-weight: 700;
+  font-family: $font-en;
+  box-sizing: content-box;
+
+  @include mq("sp") {
+    font-size: 20px;
+  }
+
+  th,
+  td {
+    border: 1px solid #707070;
+    padding: 10px 40px;
+    height: 61px;
+    vertical-align: middle;
+    line-height: 1.2;
+
+    @include mq("sp") {
+      padding: 2px 20px;
+      height: 56px;
+    }
+  }
+
+  th {
+    background: $primary-color;
+    color: #ffffff;
+    text-align: center;
+
+    &:first-child {
+      width: 262px;
+
+      @include mq("sp") {
+        // width: 100px;
+        width: 29.3%;
+      }
+    }
+  }
+
+  td {
+    background: #fff;
+    text-align: left;
+    padding-right: 23px;
+  }
+}
+
+.price__attention {
+  margin-top: 12px;
+  font-size: 12px;
+
+  @include mq("sp") {
+    margin-top: 8px;
+  }
+}
+
+/* bg-wrapper
+--------------------------------------------------------*/
+
+// .bg-wrapper {
+//   position: relative;
+
+//   &::before {
+//     content: "";
+//     position: absolute;
+//     top: 140px;
+//     left: 0;
+//     bottom: 250px;
+//     display: block;
+//     width: 980 / 1280 * 100%;
+//     // width: 100%;
+//     // bottom: 0;
+//     // left: 0;
+//     z-index: -1;
+//     // padding-top: 40%;
+//     background: $primary-color;
+//     // width: 76.5625%;
+
+//     @include mq("sp") {
+//       // width: 100%;
+//       // top: 10%;
+//       // height: 430px;
+//       display: none;
+//     }
+//   }
+// }
+.bg-wrapper {
+  position: relative;
+
+  &::before {
+    background: $primary-color;
+    bottom: 0;
+    content: "";
+    display: block;
+    left: 0;
+    position: absolute;
+    top: 294px;
+    width: 100%;
+    z-index: -1;
+
+    @include mq("pc") {
+      bottom: 258px;
+      top: 146px;
+      width: 980 / 1280 * 100%;
+    }
+  }
+}
+
+/* comments
+--------------------------------------------------------*/
+
+.comments {
+  padding-top: 0;
+  position: relative;
+
+  @include mq("sp") {
+    padding: 0;
+    background: $primary-color;
+    height: 425px;
+  }
+}
+
+.comments-inner {
+  display: flex;
+  align-items: center;
+}
+
+.comments-main {
+  background: #fff;
+  padding: 0 60px 124px;
+  z-index: 10;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.16);
+
+  @include mq("sp") {
+    padding: 0 20px 29px;
+    position: absolute;
+    top: -60px;
+    width: 90%;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}
+
+.comments-main-title {
+  text-align: left;
+  padding-top: 120px;
+
+  @include mq("sp") {
+    padding-top: 42px;
+  }
+}
+
+.comments-list {
+}
+
+
+.comments-item {
+  display: flex;
+  margin-top: 60px;
+
+  @include mq("sp") {
+    margin-top: 42px;
+  }
+}
+
+.comments-item-picture {
+  width: 100px;
+
+  @include mq("sp") {
+    width: 60px;
+  }
+
+  img {
+    width: 100%;
+  }
+}
+
+.comments-item-body {
+  padding-left: 32px;
+  line-height: 1.5;
+  width: calc(100% - 100px);
+
+  @include mq("sp") {
+    padding-left: 20px;
+    width: calc(100% - 60px);
+    font-size: 14px;
+    line-height: 1.4285;
+  }
+}
+
+.comments-item-text {
+}
+
+.comments-picture {
+  flex: 0 0 44.5%; //534px / 1200px * 100%
+  z-index: 10;
+}
+
+/* faqs
+--------------------------------------------------------*/
+
+.faqs {
+  background: url(../img/qa-bg.png);
+  background-position: top center;
+  background-size: cover;
+  background-attachment: fixed;
+  padding-top: 0;
+  color: $primary-color;
+  font-family: $font-en;
+
+  @include mq("sp") {
+    padding-bottom: 60px;
+  }
+}
+
+.faqs-items {
+  padding-top: 68px;
+
+  @include mq("sp") {
+    padding-top: 36px;
+  }
+}
+
+.faqs-item {
+  background: #fff;
+  width: 51%;
+  margin: 0 0 0 auto;
+  border-radius: 4px;
+  font-family: $font-ja;
+
+  @include mq("sp") {
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  & + & {
+    margin-top: 31px;
+
+    @include mq("sp") {
+      margin-top: 24px;
+    }
+  }
+}
+
+.faqs-box {
+  padding: 0 16px;
+}
+
+.faqs-box__q {
+  padding: 16px 40px;
+  font-weight: bold;
+  position: relative;
+  line-height: 1.5;
+
+  &::before {
+    content: "";
+    width: 24px;
+    height: 24px;
+    background: #3b69ff;
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+  }
+
+  &::after {
+    content: "Q";
+    color: #fff;
+    position: absolute;
+    top: 50%;
+    left: 5px;
+    transform: translateY(-50%);
+  }
+}
+
+.faqs-box__icon {
+  width: 17px;
+  height: 17px;
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+
+  &.is-open {
+    .faqs-box__bar2 {
+      transform: rotate(90deg);
+    }
+  }
+}
+
+.faqs-box__bar1 {
+  width: 17px;
+  height: 3px;
+  background: #3b69ff;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  left: 0;
+}
+
+.faqs-box__bar2 {
+  width: 3px;
+  height: 17px;
+  background: #3b69ff;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 0;
+  transition: all 0.3s ease 0s;
+}
+
+.faqs-box__a {
+  padding-bottom: 15px;
+  display: none;
+}
+
+.faqs-box__content {
+  background: #3b69ff33;
+  padding: 12px 16px;
+  border-radius: 4px;
+  line-height: 1.5;
+
+  @include mq("sp") {
+    font-size: 14px;
+    padding: 12px 12px 6px;
+  }
+}
+
+/* access
+--------------------------------------------------------*/
+.access {
+  position: relative;
+  padding-top: 127px;
+  padding-bottom: 116px;
+
+  @include mq("sp") {
+    background: $primary-color;
+    padding-top: 44px;
+    padding-bottom: 60px;
+  }
+}
+
+.access-inner {
+  // display: flex;
+  padding-left: 100px;
+  @include mq("pc") {
+    display: grid;
+    grid-template-columns: 414px 1fr;
+    grid-template-rows: auto 1fr;
+  }
+
+  @include mq("sp") {
+    display: block;
+    padding-left: 16px;
+  }
+}
+
+.access-main {
+  // background: transparent;
+  color: #fff;
+  // z-index: 10;
+  // width: 39.5%; // ( 100 - 60.5) %
+  // margin-bottom: 50px;
+
+  @include mq("pc") {
+    grid-area: 1 / 1 / 2 / 2;
+  }
+
+  @include mq("sp") {
+    width: 100%;
+  }
+}
+
+.access-main-title {
+  padding: 0;
+  text-align: left;
+}
+
+.access-info {
+  margin-top: 60px;
+  line-height: 1.5;
+
+  @include mq("sp") {
+    margin-top: 40px;
+    font-size: 14px;
+  }
+}
+
+.access__map {
+  @include mq("pc") {
+    grid-area: 1 / 2 / 3 / 3;
+    height: 520px; //これを指定すると「google map」ボタンが下にはみ出さなくなる
+    flex: 0 1 720px;
+  }
+
+  @include mq("sp") {
+    width: 100%;
+    margin-top: 18px;
+  }
+}
+
+.frame-wrap {
+  width: 100%;
+  padding-top: 71.62534%; //520 / 726 * 100%
+  position: relative;
+
+  iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+}
+
+.access-footer {
+  margin-top: 28px;
+
+  @include mq("pc") {
+    grid-area: 2 / 1 / 3 / 2;
+  }
+
+  @include mq("sp") {
+    text-align: center;
+    margin-top: 18px; 
+  }
+}
+
+.access-link {
+  padding: 21px 78px;
+  background: $primary-color;
+  color: #fff;
+  letter-spacing: 0.1em;
+  border: solid 1px #fff;
+
+  &:hover {
+    background: #fff;
+    color: $primary-color;
+  }
+
+  @include mq("sp") {
+    width: 100%;
+    padding: 17px;
+
+  }
+}
+
+/* contact
+--------------------------------------------------------*/
+.contact {
+  background: url(../img/contact-bg.png) center center / cover;
+  padding: 62px 0;
+
+  @include mq("sp") {
+    padding: 40px 0;
+  }
+}
+
+.contact-contain {
+  max-width: 960px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.contact-header {
+  background: url(../img/contact1.png) center center / cover;
+  color: #fff;
+  text-align: center;
+  padding-bottom: 60px;
+  border-radius: 12px 12px 0 0;
+
+  @include mq("sp") {
+    padding-bottom: 40px;
+    background: #000;
+  }
+}
+
+.contact-text {
+  margin-top: 20px;
+
+  @include mq("sp") {
+    margin-top: 12px;
+    text-align: left;
+    padding: 0 16px;
+    font-size: 14px;
+    line-height: 1.4285;
+  }
+}
+
+.contact-forms {
+}
+
+.contact-form {
+  background: #fff;
+  border-radius: 0 0 12px 12px;
+  padding: 60px 120px;
+
+  @include mq("sp") {
+    padding: 40px 12px;
+  }
+}
+
+.contact-list {
+  max-width: 720px;
+  margin: 0 auto;
+
+  & + & {
+    margin-top: 32px;
+  }
+}
+
+.contact-item {
+  @include mq("pc") {
+    display: flex;
+  }
+}
+
+.contact-item-title {
+  font-weight: bold;
+
+  @include mq("pc") {
+    flex: 0 0 174px;
+    line-height: 40px;
+  }
+}
+
+.contact-item-input {
+  @include mq("pc") {
+    flex: 0 1 100%;
+    margin-left: 18px;
+    line-height: 40px;
+  }
+
+  @include mq("sp") {
+    margin-top: 12px;
+  }
+}
+
+select {
+  -webkit-appearance: none;
+  -moz-appearance: none; 
+  appearance: none; /* デフォルトの矢印を消す */
+  border: 1px solid #707070; /* セレクトボックスのデフォルトの枠線を消す */
+  border-radius: none; /* セレクトボックスの四隅の丸み */
+  color: inherit; /* セレクトボックスの文字色 */
+  font-family: inherit;
+  padding: 12px; /* セレクトボックスの内側の余白 */
+  font-size: 1.6rem;
+
+  @include mq("pc") {
+    width: 178px; /* セレクトボックスの幅 */
+    height: 40px; /* セレクトボックスの高さ */
+  }
+
+  @include mq("sp") {
+    width: 100%;
+    font-size: 14px;  
+  }
+
+  &:focus {
+    outline: none;
+    border: 1px solid #4973ff;
+    box-shadow: 0 5px 4px -5px rgba(73, 115, 255, 0.5);
+  }
+
+  &:hover {
+    box-shadow: 0 0 5px rgba(73, 115, 255, 0.5);
+  }
+}
+
+.select-wrap {
+  position: relative;
+
+  @include mq("pc") {
+    width: 178px;
+  }
+
+  &::after {
+    position: absolute;
+    top: 40%; /* 矢印の位置 */
+    right: 12px; /* 矢印の位置 */
+    width: 6px; /* 矢印の大きさ */
+    height: 6px; /* 矢印の大きさ */
+    border-top: 2px solid $primary-color; /* 矢印の線 */
+    border-right: 2px solid $primary-color; /* 矢印の線 */
+    -webkit-transform: rotate(135deg); /* 矢印の傾き */
+    transform: rotate(135deg); /* 矢印の傾き */
+    pointer-events: none; /* 矢印部分もクリック可能にする */
+    content: "";
+  }
+}
+
+.contact-item-inline {
+  background: #ff4646;
+  margin-left: 12px;
+  color: #fff;
+  font-size: 12px;
+  padding: 2px 8px;
+
+  @include mq("sp") {
+    margin-left: 28px;
+  }
+}
+
+input[type="text"],
+input[type="email"] {
+  width: 100%;
+  height: 2em;
+  padding: 0.5em;
+  font-size: 16px;
+  border: none;
+  border-bottom: #cecdcd solid 1px;
+  outline: none;
+  background: transparent;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+
+  @include mq("sp") {
+    padding: 0;
+    font-size: 14px;
+    height: 2em;
+  }
+
+  &:focus {
+    border-bottom: 1px solid #4973ff;
+    box-shadow: 0 5px 4px -5px rgba(73, 115, 255, 0.5);
+  }
+
+  &:hover {
+    border-bottom: 1px solid #4973ff;
+    box-shadow: 0 5px 4px -5px rgba(73, 115, 255, 0.5);
+  }
+}
+
+.contact-radio-wrap {
+}
+
+input[type="radio"] {
+  opacity: 0;
+  position: absolute;
+}
+
+/* ラジオボタンの枠のスタイル */
+input[type="radio"] + .contact-radio-part::before {
+  content: "";
+  border: 1px solid #707070;
+  background: #fff;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 8px;
+  width: 12px;
+  height: 12px;
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+}
+
+/* ラジオボタンの枠ホバー時のスタイル */
+input[type="radio"] + .contact-radio-part:hover::before {
+  border-color: #3b69ff;
+  box-shadow: 0 0 4px rgba(73, 115, 255, 0.2);
+}
+
+/* チェックのスタイル */
+input[type="radio"] + .contact-radio-part::after {
+  content: "";
+  background: #3b69ff;
+  border-radius: 50%;
+  position: absolute;
+  opacity: 0;
+  transition: all 0.3s;
+  width: 6px;
+  height: 6px;
+  top: 50%;
+  left: 4px;
+  transform: translateY(-50%);
+  z-index: 1;
+}
+
+/* フォーカス時に外枠のborderの色を変更 */
+input[type="radio"]:focus + .contact-radio-part::before {
+  border: 1px solid #3b69ff;
+  box-shadow: 0 0 6px rgba(73, 115, 255, 0.2);
+}
+
+/* チェックされた時にチェックマークを表示 */
+input[type="radio"]:checked + .contact-radio-part::after {
+  opacity: 1;
+}
+
+/* クリックしている間に背景色をつける */
+input[type="radio"]:active + .contact-radio-part::before {
+  background: #4973ff33;
+}
+
+.contact-radio {
+  & + & {
+    margin-left: 40px;
+  }
+}
+
+.contact-radio-input {
+}
+
+.contact-radio-part {
+  display: inline-block;
+  font-size: 14px;
+  padding-left: 30px;
+  position: relative;
+}
+
+.contact-textarea {
+}
+
+.contact-textarea-part {
+}
+
+textarea {
+  width: 100%;
+  height: 200px;
+  resize: horizontal;
+  max-width: 720px;
+
+  @include mq("sp") {
+    margin-top: 16px;
+    height: 160px; 
+    max-width: 319px; 
+  }
+
+  &:focus {
+    outline: none;
+    border: 1px solid #4973ff;
+    box-shadow: 0 0 8px rgba(73, 115, 255, 0.5);
+  }
+
+  &:hover {
+    border: 1px solid #4973ff;
+    box-shadow: 0 0 8px rgba(73, 115, 255, 0.5);
+  }
+}
+
+.contact-footer {
+  margin: 30px auto 0;
+  max-width: 720px;
+
+  @include mq("sp") {
+    margin-top: 26px;
+  }
+}
+
+.contact-footer-text {
+}
+
+.contact-privacy {
+  position: relative;
+  display: inline-block; //.contact-privacy-partと同じ指定をすることで、チェックボックスにチェックした時の動作をスムーズに見せることができる。
+  height: 22px;
+  width: 22px;
+  vertical-align: middle;
+}
+
+.contact-privacy-input {
+  //チェックボックスをdisplay:none;で消すと→｜ボタンで下に行かなくなってしまうのでこのように消すとよい
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+
+  &:checked + .contact-privacy-part {
+    &::after {
+      position: absolute;
+      top: 0;
+      left: 5px;
+      display: block;
+      border-right: 2px solid #3b69ff; //右と
+      border-bottom: 2px solid #3b69ff; //下だけにborder
+      content: "";
+      width: 7px; //長方形を作る
+      height: 13px;
+      transform: rotate(45deg);
+    }
+  }
+
+  &:focus + .contact-privacy-part {
+    //focusがついているinputの次の.contact-privacy-partという意味
+    outline: none;
+    border: 1px solid #4973ff;
+    box-shadow: 0 0 5px rgba(73, 115, 255, 0.2);
+  }
+
+  &:checked:focus + .contact-privacy-part {
+    //チェックした時はアウトラインなしにする
+    outline: none;
+    box-shadow: none;
+    border-color: #707070;
+  }
+
+  &:hover + .contact-privacy-part {
+    border: 1px solid #4973ff;
+    box-shadow: 0 0 5px rgba(73, 115, 255, 0.2);
+  }
+
+  &:active + .contact-privacy-part {
+    background: #4973ff33;
+  }
+}
+
+.contact-privacy-part {
+  display: block;
+  border: 1px solid #707070; //外側は正方形
+  content: "";
+  width: 20px;
+  height: 20px;
+}
+
+.contact-privacy-link {
+  margin-left: 21px;
+  color: #000;
+  font-weight: bold;
+  font-size: 18px;
+  vertical-align: middle;
+  display: inline-block; //高さを指定するため
+  height: 30px; //リンク領域を広げるために高さ指定
+  line-height: 30px;
+  position: relative;
+
+  @include mq("sp") {
+    font-size: 16px;
+  }
+
+  @include mq("pc") {
+    //スマホ版の時にhoverなどで動作をつけるとタップした後に動作が残ってしまうことがあるのでPC版のみにつける
+    transition: color 0.4s;
+
+    &:hover {
+      &::after {
+        position: absolute;
+        content: "";
+        background: $primary-color;
+        height: 1px;
+        width: 100%;
+        bottom: 0;
+        left: 50%;
+        transform: translatex(-50%);
+      }
+    }
+  }
+}
+
+.contact-footer-submit {
+  margin-top: 36px;
+  display: block;
+  box-sizing: border-box;
+
+  @include mq("sp") {
+    margin-top: 28px;
+    text-align: center;
+  }
+}
+
+.contact-button {
+  background: #b2b2b2;
+
+  @include mq("sp") {
+    padding: 16px 50px;
+  }
+
+  &.-active {
+    background: #ffaa3b;
+
+    &:hover {
+      background: #f18900;
+    }
+  }
+}
+
+/* to-top
+--------------------------------------------------------*/
+
+#page_top {
+  position: fixed;
+  bottom: 40px;
+  right: 40px;
+  z-index: 9999;
+  transition: all 0.3s ease 0s;
+
+  @include mq("sp") {
+    bottom: 13px;
+    right: 16px;
+  }
+
+  img {
+    width: 50px;
+
+    @include mq("sp") {
+      width: 50px;
+    }
+  }
+}
